@@ -213,56 +213,357 @@ function DocumentsSection() {
     <div className="prose prose-neutral dark:prose-invert max-w-none">
       <h3>VibeDocs 문서 활용법</h3>
 
-      <p>VibeDocs가 생성하는 10개의 문서는 각각 다른 목적을 가지고 있습니다.</p>
-
-      <h4>1. IDEA_BRIEF.md</h4>
       <p>
-        프로젝트의 핵심 아이디어를 요약한 문서입니다.
-        AI에게 프로젝트의 맥락을 전달할 때 가장 먼저 제공하세요.
+        VibeDocs가 생성하는 10개의 문서는 AI 코딩 도구와 함께 사용할 때 최대 효과를 발휘합니다.
+        각 문서의 목적, 사용 시점, 활용 방법을 상세히 안내합니다.
       </p>
 
-      <h4>2. USER_STORIES.md</h4>
-      <p>
-        사용자 관점에서 기능을 정의합니다.
-        &ldquo;~로서, ~하고 싶다&rdquo; 형식으로 작성되어 있습니다.
-      </p>
-
-      <h4>3. SCREEN_FLOW.md</h4>
-      <p>
-        화면 구성과 페이지 간 흐름을 설명합니다.
-        UI 개발 시 이 문서를 참고하세요.
-      </p>
-
-      <h4>4. TECH_STACK.md</h4>
-      <p>
-        사용할 기술 스택과 라이브러리를 정의합니다.
-        프로젝트 초기 설정 시 참고하세요.
-      </p>
-
-      <h4>5. DATA_MODEL.md</h4>
-      <p>
-        데이터 구조와 관계를 정의합니다.
-        데이터베이스 설계나 타입 정의 시 사용합니다.
-      </p>
-
-      <h4>6. API_SPEC.md</h4>
-      <p>
-        API 엔드포인트와 요청/응답 형식을 정의합니다.
-        백엔드 개발 시 필수적으로 참고하세요.
-      </p>
-
-      <h4>7. TODO_MASTER.md</h4>
-      <p>
-        개발 태스크 목록입니다.
-        체크리스트/칸반/타임라인 뷰로 관리할 수 있습니다.
-      </p>
-
-      <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg mt-4">
-        <h5 className="font-semibold mb-2">팁: 문서 사용 순서</h5>
-        <p className="text-sm">
-          1. IDEA_BRIEF로 컨텍스트 전달 → 2. TODO_MASTER에서 작업 선택 →
-          3. 관련 문서(SCREEN_FLOW, DATA_MODEL 등) 참고 → 4. AI에게 구현 요청
+      <div className="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-lg mb-6">
+        <h5 className="font-semibold mb-2">📋 권장 문서 사용 순서</h5>
+        <p className="text-sm mb-2">
+          <strong>1단계</strong>: IDEA_BRIEF로 AI에게 프로젝트 맥락 전달<br />
+          <strong>2단계</strong>: TODO_MASTER에서 구현할 작업 선택<br />
+          <strong>3단계</strong>: 작업에 필요한 관련 문서 함께 제공<br />
+          <strong>4단계</strong>: AI에게 구현 요청 후 결과 검토
         </p>
+      </div>
+
+      {/* 1. IDEA_BRIEF */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">1</span>
+          IDEA_BRIEF.md - 아이디어 개요서
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>AI와 첫 대화를 시작할 때</li>
+              <li>새로운 AI 도구로 전환할 때</li>
+              <li>맥락을 잃어버린 대화를 복구할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>AI 대화 시작 시 가장 먼저 전달</li>
+              <li>&ldquo;이 프로젝트를 개발하려고 합니다&rdquo;와 함께 첨부</li>
+              <li>Cursor의 경우 @IDEA_BRIEF로 참조</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> AI가 프로젝트의 목적, 대상 사용자, 핵심 기능을 이해하여 일관된 맥락에서 코드를 생성합니다.
+          &ldquo;로그인 기능 만들어줘&rdquo;만 요청해도 프로젝트에 맞는 방식으로 구현됩니다.
+        </div>
+      </div>
+
+      {/* 2. USER_STORIES */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">2</span>
+          USER_STORIES.md - 사용자 스토리
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>새로운 기능을 구현할 때</li>
+              <li>기능의 범위를 정의할 때</li>
+              <li>우선순위를 정해야 할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>특정 스토리를 선택하여 AI에게 전달</li>
+              <li>&ldquo;이 사용자 스토리를 구현해주세요&rdquo;로 요청</li>
+              <li>인수 조건(AC)으로 완료 여부 검증</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> AI가 사용자 관점에서 기능을 이해합니다. &ldquo;~로서, ~하고 싶다&rdquo; 형식이
+          누가 왜 이 기능이 필요한지 명확히 전달하여, 실제 사용자에게 유용한 기능이 구현됩니다.
+        </div>
+      </div>
+
+      {/* 3. SCREEN_FLOW */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">3</span>
+          SCREEN_FLOW.md - 화면 흐름도
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>UI/UX 컴포넌트를 개발할 때</li>
+              <li>페이지 라우팅을 설정할 때</li>
+              <li>네비게이션 로직을 구현할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>특정 화면 구현 시 해당 섹션 전달</li>
+              <li>라우터 설정 시 전체 흐름도 제공</li>
+              <li>컴포넌트 목록으로 폴더 구조 설계</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> 페이지 간 이동 경로, 각 화면의 구성 요소가 정의되어 있어
+          일관된 UX와 올바른 라우팅이 구현됩니다. 개발 중 &ldquo;이 화면 다음에 뭐가 와야 하지?&rdquo; 고민이 사라집니다.
+        </div>
+      </div>
+
+      {/* 4. PRD */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">4</span>
+          PRD.md - 제품 요구사항 정의서
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>기능 요구사항을 확인할 때</li>
+              <li>비기능 요구사항(성능, 보안)을 체크할 때</li>
+              <li>기능 범위(스코프)를 논의할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>복잡한 기능 구현 전 요구사항 섹션 참조</li>
+              <li>보안/성능 관련 구현 시 비기능 요구사항 확인</li>
+              <li>기능 완료 후 체크리스트로 검증</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> 필수 기능과 선택 기능이 명확히 구분되어 우선순위 결정이 쉬워지고,
+          비기능 요구사항(보안, 성능)을 놓치지 않아 품질 높은 결과물이 완성됩니다.
+        </div>
+      </div>
+
+      {/* 5. TECH_STACK */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">5</span>
+          TECH_STACK.md - 기술 스택 정의서
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>프로젝트 초기 설정 시</li>
+              <li>패키지 설치가 필요할 때</li>
+              <li>기술 선택에 대한 근거가 필요할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>프로젝트 생성 시 &ldquo;이 스택으로 설정해줘&rdquo;</li>
+              <li>새 라이브러리 필요 시 이 문서 기준으로 선택</li>
+              <li>버전 충돌 시 참고용 버전 정보 확인</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> AI가 프로젝트에서 사용하는 기술을 정확히 알고 코드를 생성합니다.
+          &ldquo;React로 해야 할지 Vue로 해야 할지&rdquo; 같은 혼란 없이 일관된 기술 스택이 유지됩니다.
+        </div>
+      </div>
+
+      {/* 6. DATA_MODEL */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">6</span>
+          DATA_MODEL.md - 데이터 모델 정의서
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>TypeScript 타입/인터페이스 정의 시</li>
+              <li>데이터베이스 스키마 설계 시</li>
+              <li>API 요청/응답 타입 작성 시</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>타입 파일 생성 시 전체 문서 제공</li>
+              <li>&ldquo;User 타입에 맞게 구현해줘&rdquo;</li>
+              <li>데이터 관계(1:N, N:M) 참고하여 쿼리 작성</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> 타입 정의가 일관되어 타입 에러가 줄어들고, 데이터 관계가 명확하여
+          복잡한 쿼리도 정확하게 작성됩니다. 프론트엔드-백엔드 간 데이터 형식 불일치가 방지됩니다.
+        </div>
+      </div>
+
+      {/* 7. API_SPEC */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">7</span>
+          API_SPEC.md - API 명세서
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>백엔드 API 라우트 구현 시</li>
+              <li>프론트엔드에서 API 호출 코드 작성 시</li>
+              <li>API 테스트 케이스 작성 시</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>특정 엔드포인트 섹션을 복사하여 전달</li>
+              <li>&ldquo;이 API 명세대로 구현해줘&rdquo;</li>
+              <li>에러 코드 정의 참고하여 예외 처리</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> URL 경로, HTTP 메서드, 요청/응답 형식이 명확하여
+          프론트엔드와 백엔드가 동일한 인터페이스로 개발됩니다. API 문서화가 자동으로 완성됩니다.
+        </div>
+      </div>
+
+      {/* 8. TEST_SCENARIOS */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">8</span>
+          TEST_SCENARIOS.md - 테스트 시나리오
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>테스트 코드 작성 시</li>
+              <li>기능 완료 후 수동 테스트 시</li>
+              <li>버그 리포트 작성 시</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>Given-When-Then 형식으로 테스트 코드 생성</li>
+              <li>&ldquo;TC-001 시나리오를 테스트 코드로 만들어줘&rdquo;</li>
+              <li>수동 테스트 시 체크리스트로 활용</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> 테스트해야 할 시나리오가 미리 정의되어 품질 보증이 용이해집니다.
+          &ldquo;뭘 테스트해야 하지?&rdquo; 고민 없이 체계적인 테스트가 가능합니다.
+        </div>
+      </div>
+
+      {/* 9. TODO_MASTER */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">9</span>
+          TODO_MASTER.md - 개발 태스크 목록
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>다음 작업을 선택할 때</li>
+              <li>개발 진행 상황을 파악할 때</li>
+              <li>예상 일정을 산정할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>대시보드에서 체크리스트/칸반/타임라인 뷰로 관리</li>
+              <li>TODO의 프롬프트를 AI에게 전달</li>
+              <li>완료된 항목 체크하며 진행도 추적</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> Phase별로 정리된 태스크를 순서대로 완료하면 자연스럽게 앱이 완성됩니다.
+          각 TODO에 예상 시간이 있어 일정 관리가 쉬워지고, AI에게 바로 전달할 수 있는 프롬프트가 제공됩니다.
+        </div>
+      </div>
+
+      {/* 10. PROMPT_GUIDE */}
+      <div className="border rounded-lg p-4 mb-4">
+        <h4 className="flex items-center gap-2 mt-0">
+          <span className="bg-primary text-primary-foreground text-xs px-2 py-1 rounded">10</span>
+          PROMPT_GUIDE.md - 프롬프트 가이드
+        </h4>
+
+        <div className="grid md:grid-cols-2 gap-4 mt-3">
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">📍 언제 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>AI에게 효과적으로 요청하고 싶을 때</li>
+              <li>원하는 결과가 안 나올 때</li>
+              <li>새로운 AI 도구를 처음 사용할 때</li>
+            </ul>
+          </div>
+          <div>
+            <p className="text-sm font-semibold text-primary mb-1">🎯 어떻게 사용하나요?</p>
+            <ul className="text-sm mt-0 mb-2">
+              <li>프롬프트 템플릿을 상황에 맞게 활용</li>
+              <li>예시를 참고하여 자신만의 스타일 개발</li>
+              <li>안티 패턴을 피하여 효율적인 대화</li>
+            </ul>
+          </div>
+        </div>
+
+        <div className="bg-green-50 dark:bg-green-950/30 p-3 rounded text-sm">
+          <strong>✨ 효과:</strong> AI와의 소통 효율이 높아져 더 적은 대화로 원하는 결과를 얻습니다.
+          &ldquo;AI가 내 말을 못 알아듣네&rdquo; 같은 답답함이 줄어들고 생산성이 크게 향상됩니다.
+        </div>
+      </div>
+
+      {/* 문서 조합 예시 */}
+      <div className="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-lg mt-6">
+        <h5 className="font-semibold mb-3">💡 실전 예시: 로그인 기능 구현하기</h5>
+        <div className="text-sm space-y-2">
+          <p><strong>1단계:</strong> IDEA_BRIEF.md 전달 → AI가 프로젝트 맥락 이해</p>
+          <p><strong>2단계:</strong> TODO_MASTER.md에서 &ldquo;로그인 기능 구현&rdquo; 선택</p>
+          <p><strong>3단계:</strong> 함께 제공할 문서:</p>
+          <ul className="ml-4">
+            <li>USER_STORIES.md → &ldquo;사용자로서 로그인하고 싶다&rdquo; 스토리</li>
+            <li>SCREEN_FLOW.md → 로그인 화면 구성 정보</li>
+            <li>DATA_MODEL.md → User 타입 정의</li>
+            <li>API_SPEC.md → POST /api/auth/login 명세</li>
+          </ul>
+          <p><strong>4단계:</strong> AI에게 요청: &ldquo;위 문서들을 참고하여 로그인 기능을 구현해주세요&rdquo;</p>
+          <p><strong>5단계:</strong> TEST_SCENARIOS.md로 기능 검증</p>
+        </div>
       </div>
     </div>
   );
