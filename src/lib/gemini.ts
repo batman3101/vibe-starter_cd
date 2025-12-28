@@ -1,5 +1,5 @@
 // 현재 사용 중인 모델 (서버에서 검증 후 설정됨)
-let currentModel = 'gemini-2.0-flash-exp';
+let currentModel = 'gemini-2.5-flash';
 
 // API 라우트를 통한 Gemini API 호출 (CORS 우회)
 export async function generateWithGemini(

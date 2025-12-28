@@ -105,7 +105,7 @@ export async function POST(request: NextRequest) {
     }
 
     const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });
 
     const appTypeName = appType === 'web' ? '웹앱' : appType === 'mobile' ? '모바일앱' : '웹/모바일앱';
     const templateInfo = template ? `템플릿: ${template}` : '';

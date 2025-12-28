@@ -3,8 +3,8 @@ import { NextRequest, NextResponse } from 'next/server';
 
 // 사용 가능한 모델 목록 (우선순위 순)
 const AVAILABLE_MODELS = [
+  'gemini-2.5-flash',
   'gemini-2.0-flash-exp',
-  'gemini-1.5-flash-8b',
   'gemini-1.5-flash',
   'gemini-pro',
 ];

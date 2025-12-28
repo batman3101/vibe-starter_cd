@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
   try {
-    const { apiKey, prompt, systemPrompt, model = 'gemini-2.0-flash-exp' } = await request.json();
+    const { apiKey, prompt, systemPrompt, model = 'gemini-2.5-flash' } = await request.json();
 
     if (!apiKey || typeof apiKey !== 'string') {
       return NextResponse.json(
