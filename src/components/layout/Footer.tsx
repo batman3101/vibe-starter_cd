@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Github, Heart } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 export function Footer() {
   return (
@@ -37,9 +37,7 @@ export function Footer() {
 
           {/* Copyright */}
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
-            <span>Made with</span>
-            <Heart className="h-4 w-4 text-red-500 fill-red-500" />
-            <span>MIT License</span>
+            <span>Made with batman</span>
           </div>
         </div>
       </div>

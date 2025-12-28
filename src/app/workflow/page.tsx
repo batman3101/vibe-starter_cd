@@ -495,10 +495,11 @@ export default function WorkflowPage() {
 
           <Card className="bg-muted/30">
             <CardContent className="pt-6">
-              <h3 className="font-semibold mb-2">초보자를 위한 추천</h3>
-              <p className="text-muted-foreground">
-                처음 시작하신다면 <strong>Claude</strong>를 추천드립니다.
-                VibeDocs에서 생성된 문서를 Claude에게 전달하고, 단계별로 코드 구현을 요청하세요.
+              <h3 className="font-semibold mb-2">💡 초보자를 위한 추천</h3>
+              <p className="text-muted-foreground leading-relaxed">
+                처음 시작하신다면 <strong>VS Code + Claude Code</strong>를 추천드립니다.
+                먼저 VS Code를 설치하고, <code className="bg-muted px-1.5 py-0.5 rounded text-sm">npm install -g @anthropic-ai/claude-code</code>로 Claude Code를 설치하세요.
+                VibeDocs에서 생성된 문서를 활용해 자연어로 코드 구현을 요청할 수 있습니다.
                 가이드 페이지에서 더 자세한 사용법을 확인하실 수 있습니다.
               </p>
               <Button className="mt-4" onClick={() => router.push('/guide')}>
