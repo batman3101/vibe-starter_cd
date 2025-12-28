@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { ArrowRight, Sparkles, Zap, FileText } from 'lucide-react';
+import { ArrowRight, Sparkles, Route, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export function HeroSection() {
@@ -39,16 +39,16 @@ export function HeroSection() {
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
             <Button size="lg" asChild className="w-full sm:w-auto">
-              <Link href="/new" className="flex items-center gap-2">
-                <Zap className="h-5 w-5" />
-                지금 시작하기
+              <Link href="/workflow" className="flex items-center gap-2">
+                <Route className="h-5 w-5" />
+                워크플로우 시작
                 <ArrowRight className="h-4 w-4" />
               </Link>
             </Button>
             <Button size="lg" variant="outline" asChild className="w-full sm:w-auto">
-              <Link href="/guide" className="flex items-center gap-2">
-                <FileText className="h-5 w-5" />
-                사용 가이드
+              <Link href="/new" className="flex items-center gap-2">
+                <Zap className="h-5 w-5" />
+                바로 문서 생성
               </Link>
             </Button>
           </div>
@@ -57,11 +57,11 @@ export function HeroSection() {
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-3xl mx-auto">
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <div className="h-2 w-2 rounded-full bg-green-500" />
-              <span>로그인 없이 바로 사용</span>
+              <span>아이디어부터 배포까지</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <div className="h-2 w-2 rounded-full bg-blue-500" />
-              <span>30초 만에 문서 생성</span>
+              <span>7단계 완벽 가이드</span>
             </div>
             <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <div className="h-2 w-2 rounded-full bg-purple-500" />

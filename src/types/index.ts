@@ -279,4 +279,118 @@ export const STORAGE_KEYS = {
   PROJECTS_LIST: 'vibedocs-projects',
   API_KEY: 'vibedocs-api-key',
   SETTINGS: 'vibedocs-settings',
+  WORKFLOW: 'vibedocs-workflow',
 } as const;
+
+// ============================================
+// 워크플로우 관련 타입
+// ============================================
+
+export type WorkflowStepId =
+  | 'idea'
+  | 'generate'
+  | 'ai-tool'
+  | 'develop'
+  | 'extend'
+  | 'deploy'
+  | 'maintain';
+
+export type WorkflowStepStatus = 'locked' | 'available' | 'in-progress' | 'completed';
+
+export interface WorkflowChecklistItem {
+  id: string;
+  title: string;
+  description?: string;
+  checked: boolean;
+}
+
+export interface WorkflowStep {
+  id: WorkflowStepId;
+  name: string;
+  description: string;
+  status: WorkflowStepStatus;
+  linkedPage?: string;
+  icon: string;
+  estimatedTime?: string;
+  checklist: WorkflowChecklistItem[];
+}
+
+export interface UserScenario {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  recommendedPath: WorkflowStepId[];
+}
+
+export interface WorkflowState {
+  currentStep: WorkflowStepId;
+  steps: WorkflowStep[];
+  selectedScenario: string | null;
+  startedAt?: Date;
+  completedAt?: Date;
+}
+
+// ============================================
+// 문서 버전 관련 타입
+// ============================================
+
+export interface DocumentVersion {
+  id: string;
+  documentKey: keyof CoreDocuments;
+  content: string;
+  timestamp: Date;
+  reason: string;
+  todoIds?: string[];
+}
+
+// ============================================
+// 배포 관련 타입
+// ============================================
+
+export interface DeploymentItem {
+  id: string;
+  title: string;
+  description: string;
+  isRequired: boolean;
+  checked: boolean;
+  guide?: string;
+}
+
+export interface DeploymentCategory {
+  category: string;
+  icon: string;
+  items: DeploymentItem[];
+}
+
+export interface DeploymentPlatform {
+  id: string;
+  name: string;
+  icon: string;
+  description: string;
+  steps: string[];
+  docsUrl: string;
+}
+
+// ============================================
+// AI 진행도 분석 타입
+// ============================================
+
+export interface ProgressAnalysisResult {
+  todoId: string;
+  title: string;
+  confidence: number;
+  reason: string;
+  suggestedStatus: TodoStatus;
+}
+
+export interface CodeAnalysisRequest {
+  code: string;
+  language?: string;
+  todos: TodoItem[];
+}
+
+export interface CodeAnalysisResult {
+  matchedTodos: ProgressAnalysisResult[];
+  suggestions: string[];
+}

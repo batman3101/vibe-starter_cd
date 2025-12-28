@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { Menu, X, FileText, LayoutDashboard, Palette, BookOpen, Key, Settings } from 'lucide-react';
+import { Menu, X, FileText, LayoutDashboard, Palette, BookOpen, Key, Settings, Route } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useApiKey } from '@/stores';
 import { ApiKeyModal } from '@/components/project';
 import { ThemeToggle } from '@/components/theme-toggle';
 
 const navItems = [
+  { href: '/workflow', label: '워크플로우', icon: Route },
   { href: '/new', label: '새 프로젝트', icon: FileText },
   { href: '/dashboard', label: '대시보드', icon: LayoutDashboard },
   { href: '/design', label: '디자인 추출', icon: Palette },

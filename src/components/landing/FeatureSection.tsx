@@ -1,9 +1,16 @@
 'use client';
 
-import { FileText, Palette, CheckSquare, Layers, Cpu, Download } from 'lucide-react';
+import { FileText, Palette, CheckSquare, Layers, Cpu, Download, Route } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const features = [
+  {
+    icon: Route,
+    title: 'End-to-End 가이드',
+    description: '아이디어부터 배포까지 7단계 워크플로우로 초보자도 쉽게 개발 여정을 완성할 수 있습니다.',
+    color: 'text-indigo-500',
+    bgColor: 'bg-indigo-500/10',
+  },
   {
     icon: FileText,
     title: '문서 자동 생성',

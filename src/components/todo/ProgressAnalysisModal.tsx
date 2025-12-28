@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Sparkles, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
+import { Sparkles, CheckCircle2, AlertCircle, Loader2, Code } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useProjectStore } from '@/stores';
 import { useApiKey } from '@/stores/settingsStore';
 import type { TodoItem } from '@/types';
@@ -24,21 +25,31 @@ interface MatchedTodo {
   todo: TodoItem;
   confidence: number;
   reason: string;
+  suggestedStatus: 'in-progress' | 'done';
 }
 
 export function ProgressAnalysisModal() {
   const { project, updateTodoStatus } = useProjectStore();
-  const { hasApiKey } = useApiKey();
+  const { hasApiKey, apiKey } = useApiKey();
   const [isOpen, setIsOpen] = useState(false);
   const [workDescription, setWorkDescription] = useState('');
+  const [codeSnippet, setCodeSnippet] = useState('');
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [matchedTodos, setMatchedTodos] = useState<MatchedTodo[]>([]);
   const [selectedTodos, setSelectedTodos] = useState<Set<string>>(new Set());
   const [analyzed, setAnalyzed] = useState(false);
+  const [analysisMode, setAnalysisMode] = useState<'description' | 'code'>('description');
+  const [summary, setSummary] = useState('');
 
   const handleAnalyze = async () => {
-    if (!project || !workDescription.trim()) {
-      toast.error('작업 내용을 입력해주세요');
+    if (!project) {
+      toast.error('프로젝트가 없습니다');
+      return;
+    }
+
+    const inputText = analysisMode === 'code' ? codeSnippet : workDescription;
+    if (!inputText.trim()) {
+      toast.error(analysisMode === 'code' ? '코드를 입력해주세요' : '작업 내용을 입력해주세요');
       return;
     }
 
@@ -46,14 +57,77 @@ export function ProgressAnalysisModal() {
     setMatchedTodos([]);
     setSelectedTodos(new Set());
     setAnalyzed(false);
+    setSummary('');
 
-    // Mock analysis - simulating AI response
-    // In production, this would call Claude API
+    try {
+      // API 키가 있으면 실제 AI 분석 사용
+      if (hasApiKey && apiKey) {
+        const response = await fetch('/api/analyze-progress', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            apiKey,
+            workDescription: analysisMode === 'description' ? inputText : `구현한 코드:\n${inputText}`,
+            todos: project.todos.map((t) => ({
+              id: t.id,
+              title: t.title,
+              description: t.description,
+              phase: t.phase,
+              status: t.status,
+              priority: t.priority,
+            })),
+            code: analysisMode === 'code' ? inputText : undefined,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.success) {
+          throw new Error(data.error || 'AI 분석 실패');
+        }
+
+        // 결과 매핑
+        const matches: MatchedTodo[] = data.matches.map((m: { todoId: string; confidence: number; reason: string; suggestedStatus: 'in-progress' | 'done' }) => {
+          const todo = project.todos.find((t) => t.id === m.todoId);
+          return {
+            todo,
+            confidence: m.confidence,
+            reason: m.reason,
+            suggestedStatus: m.suggestedStatus,
+          };
+        }).filter((m: MatchedTodo) => m.todo);
+
+        // 자동 선택 (70% 이상)
+        const autoSelected = new Set<string>();
+        matches.forEach((match: MatchedTodo) => {
+          if (match.confidence >= 70) {
+            autoSelected.add(match.todo.id);
+          }
+        });
+
+        setMatchedTodos(matches);
+        setSelectedTodos(autoSelected);
+        setSummary(data.summary || '');
+        setAnalyzed(true);
+      } else {
+        // Mock 분석 (API 키 없을 때)
+        await performMockAnalysis(inputText);
+      }
+    } catch (error) {
+      console.error('Analysis error:', error);
+      toast.error(error instanceof Error ? error.message : '분석 중 오류가 발생했습니다');
+      // 폴백: Mock 분석 실행
+      await performMockAnalysis(inputText);
+    } finally {
+      setIsAnalyzing(false);
+    }
+  };
+
+  const performMockAnalysis = async (inputText: string) => {
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Simple keyword matching for mock
-    const pendingTodos = project.todos.filter((t) => t.status !== 'done');
-    const workLower = workDescription.toLowerCase();
+    const pendingTodos = project!.todos.filter((t) => t.status !== 'done');
+    const inputLower = inputText.toLowerCase();
 
     const matches: MatchedTodo[] = [];
 
@@ -62,15 +136,13 @@ export function ProgressAnalysisModal() {
       const descWords = (todo.description || '').toLowerCase().split(/\s+/);
       const allWords = [...titleWords, ...descWords];
 
-      // Calculate simple match score
       let matchCount = 0;
       allWords.forEach((word) => {
-        if (word.length > 2 && workLower.includes(word)) {
+        if (word.length > 2 && inputLower.includes(word)) {
           matchCount++;
         }
       });
 
-      // Check for specific keywords
       const keywords = [
         '설정', '설치', '구현', '완료', '추가', '생성', '작성',
         'setup', 'install', 'implement', 'complete', 'add', 'create', 'write',
@@ -78,7 +150,7 @@ export function ProgressAnalysisModal() {
       ];
 
       keywords.forEach((keyword) => {
-        if (workLower.includes(keyword) && (todo.title.toLowerCase().includes(keyword) ||
+        if (inputLower.includes(keyword) && (todo.title.toLowerCase().includes(keyword) ||
             (todo.description || '').toLowerCase().includes(keyword))) {
           matchCount += 2;
         }
@@ -90,15 +162,14 @@ export function ProgressAnalysisModal() {
           todo,
           confidence,
           reason: `키워드 매칭 (${matchCount}개 일치)`,
+          suggestedStatus: confidence >= 70 ? 'done' : 'in-progress',
         });
       }
     });
 
-    // Sort by confidence and take top 5
     matches.sort((a, b) => b.confidence - a.confidence);
     const topMatches = matches.slice(0, 5);
 
-    // Auto-select high confidence matches
     const autoSelected = new Set<string>();
     topMatches.forEach((match) => {
       if (match.confidence >= 70) {
@@ -108,8 +179,8 @@ export function ProgressAnalysisModal() {
 
     setMatchedTodos(topMatches);
     setSelectedTodos(autoSelected);
+    setSummary(`${topMatches.length}개의 관련 TODO 항목을 발견했습니다. (Mock 분석)`);
     setAnalyzed(true);
-    setIsAnalyzing(false);
   };
 
   const toggleTodoSelection = (todoId: string) => {
@@ -130,12 +201,21 @@ export function ProgressAnalysisModal() {
       return;
     }
 
+    let doneCount = 0;
+    let progressCount = 0;
+
     selectedTodos.forEach((todoId) => {
-      updateTodoStatus(todoId, 'done', 'ai',
-        matchedTodos.find((m) => m.todo.id === todoId)?.confidence);
+      const match = matchedTodos.find((m) => m.todo.id === todoId);
+      const status = match?.suggestedStatus || 'done';
+      updateTodoStatus(todoId, status, 'ai', match?.confidence);
+      if (status === 'done') doneCount++;
+      else progressCount++;
     });
 
-    toast.success(`${selectedTodos.size}개 항목이 완료로 표시되었습니다`);
+    const message = [];
+    if (doneCount > 0) message.push(`${doneCount}개 완료`);
+    if (progressCount > 0) message.push(`${progressCount}개 진행중`);
+    toast.success(`${message.join(', ')}으로 표시되었습니다`);
     setIsOpen(false);
     resetState();
   };
@@ -143,20 +223,31 @@ export function ProgressAnalysisModal() {
   const handleApplyAll = () => {
     if (matchedTodos.length === 0) return;
 
+    let doneCount = 0;
+    let progressCount = 0;
+
     matchedTodos.forEach((match) => {
-      updateTodoStatus(match.todo.id, 'done', 'ai', match.confidence);
+      updateTodoStatus(match.todo.id, match.suggestedStatus, 'ai', match.confidence);
+      if (match.suggestedStatus === 'done') doneCount++;
+      else progressCount++;
     });
 
-    toast.success(`${matchedTodos.length}개 항목이 완료로 표시되었습니다`);
+    const message = [];
+    if (doneCount > 0) message.push(`${doneCount}개 완료`);
+    if (progressCount > 0) message.push(`${progressCount}개 진행중`);
+    toast.success(`${message.join(', ')}으로 표시되었습니다`);
     setIsOpen(false);
     resetState();
   };
 
   const resetState = () => {
     setWorkDescription('');
+    setCodeSnippet('');
     setMatchedTodos([]);
     setSelectedTodos(new Set());
     setAnalyzed(false);
+    setSummary('');
+    setAnalysisMode('description');
   };
 
   const getConfidenceColor = (confidence: number) => {
@@ -196,35 +287,62 @@ export function ProgressAnalysisModal() {
         </DialogHeader>
 
         <div className="space-y-4 mt-4">
-          {/* Input Section */}
-          <div className="space-y-2">
-            <label className="text-sm font-medium">작업 내용</label>
-            <Textarea
-              placeholder="오늘 완료한 작업을 자세히 설명해주세요...&#10;&#10;예: 프로젝트 초기 설정을 완료했습니다. Next.js 14와 TypeScript를 설치하고 Tailwind CSS 테마를 설정했습니다. shadcn/ui 컴포넌트도 추가했습니다."
-              value={workDescription}
-              onChange={(e) => setWorkDescription(e.target.value)}
-              className="min-h-[120px]"
-              disabled={isAnalyzing}
-            />
-            <p className="text-xs text-muted-foreground">
-              구체적으로 작성할수록 더 정확한 매칭이 가능합니다.
-            </p>
-          </div>
+          {/* Input Section with Tabs */}
+          <Tabs value={analysisMode} onValueChange={(v) => setAnalysisMode(v as 'description' | 'code')}>
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="description" className="gap-2">
+                <Sparkles className="h-4 w-4" />
+                작업 설명
+              </TabsTrigger>
+              <TabsTrigger value="code" className="gap-2">
+                <Code className="h-4 w-4" />
+                코드 분석
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="description" className="space-y-2 mt-4">
+              <label className="text-sm font-medium">작업 내용</label>
+              <Textarea
+                placeholder="오늘 완료한 작업을 자세히 설명해주세요...&#10;&#10;예: 프로젝트 초기 설정을 완료했습니다. Next.js 14와 TypeScript를 설치하고 Tailwind CSS 테마를 설정했습니다. shadcn/ui 컴포넌트도 추가했습니다."
+                value={workDescription}
+                onChange={(e) => setWorkDescription(e.target.value)}
+                className="min-h-[120px]"
+                disabled={isAnalyzing}
+              />
+              <p className="text-xs text-muted-foreground">
+                구체적으로 작성할수록 더 정확한 매칭이 가능합니다.
+              </p>
+            </TabsContent>
+
+            <TabsContent value="code" className="space-y-2 mt-4">
+              <label className="text-sm font-medium">구현한 코드</label>
+              <Textarea
+                placeholder="구현한 코드를 붙여넣기 하세요...&#10;&#10;AI가 코드를 분석하여 관련된 TODO 항목을 자동으로 식별합니다."
+                value={codeSnippet}
+                onChange={(e) => setCodeSnippet(e.target.value)}
+                className="min-h-[150px] font-mono text-sm"
+                disabled={isAnalyzing}
+              />
+              <p className="text-xs text-muted-foreground">
+                함수, 컴포넌트, 또는 주요 로직을 포함한 코드를 붙여넣으세요.
+              </p>
+            </TabsContent>
+          </Tabs>
 
           <Button
             onClick={handleAnalyze}
-            disabled={isAnalyzing || !workDescription.trim()}
+            disabled={isAnalyzing || (analysisMode === 'description' ? !workDescription.trim() : !codeSnippet.trim())}
             className="w-full"
           >
             {isAnalyzing ? (
               <>
                 <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                분석 중...
+                {hasApiKey ? 'AI 분석 중...' : 'Mock 분석 중...'}
               </>
             ) : (
               <>
                 <Sparkles className="h-4 w-4 mr-2" />
-                분석하기
+                {hasApiKey ? 'AI로 분석하기' : '분석하기 (Mock)'}
               </>
             )}
           </Button>
@@ -232,6 +350,13 @@ export function ProgressAnalysisModal() {
           {/* Results Section */}
           {analyzed && (
             <div className="space-y-4 pt-4 border-t">
+              {/* Summary */}
+              {summary && (
+                <div className="p-3 rounded-lg bg-primary/5 border border-primary/20">
+                  <p className="text-sm">{summary}</p>
+                </div>
+              )}
+
               <div className="flex items-center justify-between">
                 <h4 className="font-medium">매칭된 TODO 항목</h4>
                 {matchedTodos.length > 0 && (
@@ -271,6 +396,9 @@ export function ProgressAnalysisModal() {
                               <span className="font-medium">{match.todo.title}</span>
                               <Badge className={getConfidenceBadge(match.confidence)}>
                                 {match.confidence}% 일치
+                              </Badge>
+                              <Badge variant={match.suggestedStatus === 'done' ? 'default' : 'secondary'}>
+                                {match.suggestedStatus === 'done' ? '완료' : '진행중'}
                               </Badge>
                             </div>
                             {match.todo.description && (

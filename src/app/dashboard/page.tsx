@@ -2,10 +2,11 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { ListChecks, LayoutGrid, Calendar, Plus, FileText, Download } from 'lucide-react';
+import { ListChecks, LayoutGrid, Calendar, Plus, FileText, Download, Rocket } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { ChecklistView, KanbanView, TimelineView, ProgressAnalysisModal } from '@/components/todo';
+import { DeployTab } from '@/components/dashboard';
 import { useProjectStore } from '@/stores';
 import { DOCUMENT_NAMES, type CoreDocuments } from '@/types';
 import JSZip from 'jszip';
@@ -123,6 +124,10 @@ export default function DashboardPage() {
             <Calendar className="h-4 w-4" />
             타임라인
           </TabsTrigger>
+          <TabsTrigger value="deploy" className="flex items-center gap-2">
+            <Rocket className="h-4 w-4" />
+            배포 준비
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="checklist">
@@ -135,6 +140,10 @@ export default function DashboardPage() {
 
         <TabsContent value="timeline">
           <TimelineView />
+        </TabsContent>
+
+        <TabsContent value="deploy">
+          <DeployTab />
         </TabsContent>
       </Tabs>
     </div>
