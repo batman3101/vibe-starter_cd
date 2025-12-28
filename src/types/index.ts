@@ -4,7 +4,7 @@
 // 기본 타입
 // ============================================
 
-export type TemplateType = 'shopping' | 'booking' | 'community' | 'blog' | 'dashboard' | 'custom';
+export type TemplateType = 'shopping' | 'booking' | 'community' | 'blog' | 'dashboard' | 'inventory' | 'hr' | 'webpage' | 'custom';
 export type AppType = 'web' | 'mobile' | 'both';
 export type TodoStatus = 'pending' | 'in-progress' | 'done';
 export type Priority = 'critical' | 'high' | 'medium' | 'low';

@@ -516,7 +516,7 @@ export const AI_TOOLS_COMPARISON = [
   {
     id: 'claudecode',
     name: 'Claude Code',
-    url: 'https://docs.anthropic.com/en/docs/claude-code',
+    url: 'https://www.anthropic.com',
     bestFor: 'VS Code에서 터미널 기반 AI 코딩',
     pros: ['VS Code 연동', '전체 프로젝트 이해', '자연어 명령어'],
     cons: ['Node.js 설치 필요', 'API 키 필요'],
@@ -526,7 +526,7 @@ export const AI_TOOLS_COMPARISON = [
   {
     id: 'codex',
     name: 'OpenAI Codex',
-    url: 'https://openai.com/index/openai-codex',
+    url: 'https://openai.com',
     bestFor: 'VS Code에서 자동 코드 편집',
     pros: ['자동 승인 모드', '빠른 코드 수정', '안전한 승인 시스템'],
     cons: ['Node.js 설치 필요', 'API 키 필요'],
@@ -536,7 +536,7 @@ export const AI_TOOLS_COMPARISON = [
   {
     id: 'cursor',
     name: 'Cursor',
-    url: 'https://cursor.sh',
+    url: 'https://cursor.com',
     bestFor: 'AI 네이티브 코드 에디터',
     pros: ['AI 내장 IDE', 'Cmd+K 인라인 편집', '자동 완성'],
     cons: ['별도 에디터 설치', '유료 플랜 권장'],
